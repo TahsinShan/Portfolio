@@ -25,7 +25,6 @@
 
     if (auto && !messagesEl.hasChildNodes()) {
       addMessage("👋 Hi! I'm Shan's bot, your assistant here. I will let you know about him well.", 'bot');
-
       welcomeTimeout = setTimeout(() => {
         if (!userInteracted) hideChat();
       }, 7000);
@@ -37,7 +36,7 @@
     container.style.display = 'none';
   }
 
-  // Send message to backend API (AI)
+  // Send message to backend API (OpenRouter via Vercel)
   async function sendMessage() {
     const text = inputEl.value.trim();
     if (!text) return;
@@ -56,9 +55,7 @@
       const response = await fetch('https://shans-bot-api.vercel.app/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text })
-
-        })
+        body: JSON.stringify({ message: text }) // ✅ Correct format
       });
 
       const data = await response.json();
@@ -80,14 +77,14 @@
     return container.contains(event.target) || icon.contains(event.target);
   }
 
-  // Event: Click icon
+  // Click on bot icon
   icon.addEventListener('click', () => {
     userInteracted = true;
     clearTimeout(welcomeTimeout);
     showChat();
   });
 
-  // Event: Click outside = hide
+  // Click outside = hide
   document.addEventListener('click', (e) => {
     if (!chatWasClicked(e)) {
       hideChat();
