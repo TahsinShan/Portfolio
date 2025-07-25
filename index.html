@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tahsin Hasan Shan</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="bot.css" />
+  <script src="bot.js" defer></script>
+</head>
+<body>
+
+<!-- Navigation -->
+<header>
+  <nav class="navbar transparent" id="navbar">
+    <div class="logo"><a href="#home">Shan</a></div>
+    <div class="hamburger" id="hamburger">&#9776;</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#home">Home</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#achievements">Achievements</a></li>
+      <li><a href="#courses">Courses</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<!-- Hero -->
+<section id="home" class="home">
+  <div class="hero-content">
+    <h1>Tahsin Hasan Shan</h1>
+    <p>Student • Developer • Tech Enthusiast</p>
+  </div>
+</section>
+
+<!-- About -->
+<section id="about" class="section">
+  <h2>About Me</h2>
+  <p>Founder and General Secretary of the SCPSC IT Club. Passionate about programming, co-curriculars, and future studies in CS abroad. Motivated, curious, and self-taught.</p>
+</section>
+
+<!-- Skills -->
+<section id="skills" class="section alt">
+  <h2>Skills</h2>
+  <ul>
+    <li>Python (Strong)</li>
+    <li>HTML, CSS, JS (Basic)</li>
+    <li>Arduino Programming</li>
+    <li>Leadership & Communication</li>
+  </ul>
+</section>
+
+<!-- Projects -->
+<section id="projects" class="section">
+  <h2>Projects</h2>
+  <ul>
+    <li>🔌 Smart Street System (Arduino Uno)</li>
+    <li>🚀 Mars Rover Prototype</li>
+    <li>💻 20+ Python Mini Projects</li>
+    <li>🌐 Pangolin Website</li>
+  </ul>
+</section>
+<!-- Achievements -->
+<section id="achievements" class="section alt">
+  <h2>Achievements</h2>
+  <ul>
+    <li>Regional Winner – National High School Programming Contest</li>
+    <li> Multiple Speech & Poem Recitation Awards</li>
+    <li>Lead Organizer – SCPSC IT Club Events & Workshops</li>
+    <li> SSC Result – GPA 5.00</li>
+  </ul>
+</section>
+
+<!-- Courses -->
+<section id="courses" class="section">
+  <h2>Courses Completed</h2>
+  <ul>
+    <li>✔️ Python for Beginners – Coursera</li>
+    <li>✔️ Web Development Basics – freeCodeCamp</li>
+    <li>✔️ Arduino Programming & Electronics – YouTube Projects</li>
+    <li>✔️ Git & GitHub Essentials – Self Taught</li>
+  </ul>
+</section>
+<!-- Contact -->
+<section id="contact" class="section alt">
+  <h2>Contact</h2>
+  <p>Email: <a href="mailto:tahsinhasanshan@gmail.com">tahsinhasanshan@gmail.com</a></p>
+  <p>Phone: +88 01816037877</p>
+  <div class="social-icons">
+    <a href="https://github.com/tahsinshan" target="_blank"><img src="assets/github-logo.png" height="48px" alt="GitHub"></a>
+    <a href="https://www.instagram.com/shan_udhao/" target="_blank"><img src="assets/instagram-removebg-preview.png" height="50px" alt="Instagram"></a>
+    <a href="https://www.facebook.com/shanudhao" target="_blank"><img src="assets/facebook_logo.png" height="55px"alt="Facebook"></a>
+    <a href="https://www.l" target="_blank"><img src="assets/linked.png" height="55px"alt="linked-in"></a>
+  </div>
+</section>
+<!-- Bot Icon -->
+<div id="chatbot-icon" tabindex="0" aria-label="Open chatbot">🤖</div>
+
+<!-- Chat Container -->
+<div id="chatbot-container" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Chatbot window">
+  <div id="chatbot-header">
+    <span>Shan's Bot</span>
+    <button id="chatbot-close" aria-label="Close chat">✖</button>
+  </div>
+  <div id="chatbot-messages" aria-live="polite" aria-atomic="false"></div>
+  <div id="chatbot-input-area">
+    <input type="text" id="chatbot-input" placeholder="Type your message..." autocomplete="off" aria-label="Chat message input" />
+    <button id="chatbot-send">Send</button>
+  </div>
+</div>
+
+
+
+<script src="script.js"></script>
+</body>
+</html>
