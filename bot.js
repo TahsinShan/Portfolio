@@ -56,7 +56,7 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
 
     try {
-      const response = await fetch("https://shans-bot-api.vercel.app/api/chat", {
+      const response = await fetch("https://shans-bot-9w2ljj2sr-tahsin-hasan-shans-projects.vercel.app/api/chat", {
   method: "POST",
   headers: {
     "Content-Type": "application/json",
