@@ -1,4 +1,6 @@
 (() => {
+  console.log("✅ bot.js loaded"); // debug line
+
   const icon = document.getElementById('chatbot-icon');
   const container = document.getElementById('chatbot-container');
   const closeBtn = document.getElementById('chatbot-close');
@@ -6,10 +8,14 @@
   const inputEl = document.getElementById('chatbot-input');
   const sendBtn = document.getElementById('chatbot-send');
 
+  if (!icon || !container || !closeBtn || !messagesEl || !inputEl || !sendBtn) {
+    console.error("❌ Chatbot elements missing in HTML!");
+    return;
+  }
+
   let userInteracted = false;
   let welcomeTimeout;
 
-  // Add message to chat
   function addMessage(text, sender) {
     const msg = document.createElement('div');
     msg.classList.add('message', sender);
@@ -18,7 +24,6 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  // Show chat
   function showChat(auto = false) {
     container.style.display = 'flex';
     inputEl.focus();
@@ -32,12 +37,10 @@
     }
   }
 
-  // Hide chat
   function hideChat() {
     container.style.display = 'none';
   }
 
-  // Send message to backend API (AI)
   async function sendMessage() {
     const text = inputEl.value.trim();
     if (!text) return;
@@ -56,9 +59,7 @@
       const response = await fetch('https://shans-bot-api.vercel.app/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [{ role: "user", content: text }]
-        })
+        body: JSON.stringify({ message: text }) // ✅ fixed here
       });
 
       const data = await response.json();
@@ -75,19 +76,16 @@
     }
   }
 
-  // Detect click inside chat
   function chatWasClicked(event) {
     return container.contains(event.target) || icon.contains(event.target);
   }
 
-  // Event: Click icon
   icon.addEventListener('click', () => {
     userInteracted = true;
     clearTimeout(welcomeTimeout);
     showChat();
   });
 
-  // Event: Click outside = hide
   document.addEventListener('click', (e) => {
     if (!chatWasClicked(e)) {
       hideChat();
@@ -97,23 +95,17 @@
     }
   });
 
-  // Scroll = hide
   window.addEventListener('scroll', () => {
     hideChat();
   });
 
-  // Enter key to send
   inputEl.addEventListener('keydown', (e) => {
     if (e.key === 'Enter') sendMessage();
   });
 
-  // Click send button
   sendBtn.addEventListener('click', sendMessage);
-
-  // Close button
   closeBtn.addEventListener('click', hideChat);
 
-  // Auto-open on page load
   window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
       showChat(true);
