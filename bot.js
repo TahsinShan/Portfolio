@@ -56,8 +56,8 @@
       const response = await fetch('https://shans-bot-api.vercel.app/api/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          messages: [{ role: "user", content: text }]
+        body: JSON.stringify({ message: text })
+
         })
       });
 
