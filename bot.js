@@ -1,8 +1,16 @@
-(function () {
+(() => {
+  const icon = document.getElementById('chatbot-icon');
+  const container = document.getElementById('chatbot-container');
+  const closeBtn = document.getElementById('chatbot-close');
+  const messagesEl = document.getElementById('chatbot-messages');
+  const inputEl = document.getElementById('chatbot-input');
+  const sendBtn = document.getElementById('chatbot-send');
+
   let userInteracted = false;
   let welcomeTimeout;
 
-  function addMessage(messagesEl, text, sender) {
+  // Add message to chat
+  function addMessage(text, sender) {
     const msg = document.createElement('div');
     msg.classList.add('message', sender);
     msg.textContent = text;
@@ -10,96 +18,105 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
-  function showChat(container, messagesEl, inputEl, auto = false) {
-    container.classList.add('show');
+  // Show chat
+  function showChat(auto = false) {
+    container.style.display = 'flex';
     inputEl.focus();
 
     if (auto && !messagesEl.hasChildNodes()) {
-      addMessage(messagesEl, "👋 Hi! I'm Shan's bot, your assistant here. I will let you know about him well.", 'bot');
+      addMessage("👋 Hi! I'm Shan's bot, your assistant here. I will let you know about him well.", 'bot');
+
       welcomeTimeout = setTimeout(() => {
-        if (!userInteracted) container.classList.remove('show');
+        if (!userInteracted) hideChat();
       }, 7000);
     }
   }
 
-  function hideChat(container) {
-    container.classList.remove('show');
+  // Hide chat
+  function hideChat() {
+    container.style.display = 'none';
   }
 
-  window.addEventListener('load', function () {
-    const icon = document.getElementById('chatbot-icon');
-    const container = document.getElementById('chatbot-container');
-    const closeBtn = document.getElementById('chatbot-close');
-    const messagesEl = document.getElementById('chatbot-messages');
-    const inputEl = document.getElementById('chatbot-input');
-    const sendBtn = document.getElementById('chatbot-send');
+  // Send message to backend API (AI)
+  async function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text) return;
 
-    if (!icon || !container || !closeBtn || !messagesEl || !inputEl || !sendBtn) {
-      console.error("❌ Chatbot elements not found.");
-      return;
-    }
+    addMessage(text, 'user');
+    inputEl.value = '';
+    messagesEl.scrollTop = messagesEl.scrollHeight;
 
-    async function sendMessage() {
-      const text = inputEl.value.trim();
-      if (!text) return;
+    const loadingMsg = document.createElement('div');
+    loadingMsg.classList.add('message', 'bot');
+    loadingMsg.textContent = '...';
+    messagesEl.appendChild(loadingMsg);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
 
-      addMessage(messagesEl, text, 'user');
-      inputEl.value = '';
+    try {
+      const response = await fetch('https://shans-bot-api.vercel.app/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: [{ role: "user", content: text }]
+        })
+      });
 
-      const loadingMsg = document.createElement('div');
-      loadingMsg.classList.add('message', 'bot');
-      loadingMsg.textContent = '...';
-      messagesEl.appendChild(loadingMsg);
-      messagesEl.scrollTop = messagesEl.scrollHeight;
+      const data = await response.json();
+      loadingMsg.remove();
 
-      try {
-        const res = await fetch('https://shans-bot-api.vercel.app/api/chat', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text })
-        });
-        const data = await res.json();
-        loadingMsg.remove();
-        if (data.reply) {
-          addMessage(messagesEl, data.reply, 'bot');
-        } else {
-          addMessage(messagesEl, "⚠️ I couldn’t understand that. Please try again.", 'bot');
-        }
-      } catch (err) {
-        loadingMsg.remove();
-        addMessage(messagesEl, "❌ Error: Couldn't reach the server.", 'bot');
+      if (data.reply) {
+        addMessage(data.reply, 'bot');
+      } else {
+        addMessage("⚠️ I couldn’t understand that. Please try again.", 'bot');
       }
+    } catch (err) {
+      loadingMsg.remove();
+      addMessage("❌ Error: Couldn't reach the server.", 'bot');
     }
+  }
 
-    icon.addEventListener('click', () => {
+  // Detect click inside chat
+  function chatWasClicked(event) {
+    return container.contains(event.target) || icon.contains(event.target);
+  }
+
+  // Event: Click icon
+  icon.addEventListener('click', () => {
+    userInteracted = true;
+    clearTimeout(welcomeTimeout);
+    showChat();
+  });
+
+  // Event: Click outside = hide
+  document.addEventListener('click', (e) => {
+    if (!chatWasClicked(e)) {
+      hideChat();
+    } else {
       userInteracted = true;
       clearTimeout(welcomeTimeout);
-      showChat(container, messagesEl, inputEl);
-    });
+    }
+  });
 
-    closeBtn.addEventListener('click', () => hideChat(container));
+  // Scroll = hide
+  window.addEventListener('scroll', () => {
+    hideChat();
+  });
 
-    document.addEventListener('click', (e) => {
-      if (!container.contains(e.target) && !icon.contains(e.target)) {
-        hideChat(container);
-      } else {
-        userInteracted = true;
-        clearTimeout(welcomeTimeout);
-      }
-    });
+  // Enter key to send
+  inputEl.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') sendMessage();
+  });
 
-    window.addEventListener('scroll', () => {
-      hideChat(container);
-    });
+  // Click send button
+  sendBtn.addEventListener('click', sendMessage);
 
-    inputEl.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') sendMessage();
-    });
+  // Close button
+  closeBtn.addEventListener('click', hideChat);
 
-    sendBtn.addEventListener('click', sendMessage);
-
+  // Auto-open on page load
+  window.addEventListener('DOMContentLoaded', () => {
     setTimeout(() => {
-      showChat(container, messagesEl, inputEl, true);
+      showChat(true);
     }, 1000);
   });
 })();
